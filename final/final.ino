@@ -1,6 +1,8 @@
 #include <ros.h>
 #include <ros/time.h>
 #include <sensor_msgs/Range.h>
+#include <std_msgs/Int32.h>
+
 
 ros::NodeHandle  nh;
 
@@ -12,8 +14,51 @@ int maximumRange = 200; // Maximum range needed
 int minimumRange = 0; // Minimum range needed
 long duration;
 int distance; // Duration used to calculate distance
+long range_time;
+int value;
 
+void messageCb( const std_msgs::Int32& motor_msg){
+  value=motor_msg.data;
+  if(value==1)
+  {digitalWrite(13, HIGH-digitalRead(13));  //fORWARD
+  //digitalWrite(8,HIGH);
+  digitalWrite(2,LOW);
+  digitalWrite(3,HIGH);
+  digitalWrite(4,255);
+  //digitalWrite(9,25);
+  digitalWrite(7,HIGH);
+  digitalWrite(8,LOW);
+  //digitalWrite(8,LOW);
+  digitalWrite(9,255);}
 
+  if(value==0)
+  {
+   digitalWrite(13, HIGH-digitalRead(13));   // STOP
+digitalWrite(8,HIGH);
+ digitalWrite(9,0);
+  digitalWrite(8,LOW);
+  digitalWrite(7,LOW);
+digitalWrite(9,25);
+  digitalWrite(2,HIGH);
+  digitalWrite(4,0);
+  digitalWrite(8,LOW);
+  digitalWrite(3,LOW); 
+    }
+    if(value==2)
+  {digitalWrite(13, HIGH-digitalRead(13));    //LEFT
+  //digitalWrite(8,HIGH);
+  digitalWrite(2,LOW);
+  digitalWrite(3,HIGH);
+  digitalWrite(4,0);
+  //digitalWrite(9,25);
+  digitalWrite(7,HIGH);
+  digitalWrite(8,LOW);
+  //digitalWrite(8,LOW);
+  digitalWrite(9,255);}
+  
+}
+
+ros::Subscriber<std_msgs::Int32> sub("/imput", messageCb );
 
 
 sensor_msgs::Range range_msg;
@@ -37,7 +82,7 @@ pinMode(13, OUTPUT);
  
   nh.initNode();
   nh.advertise(pub_range);
-  
+  nh.subscribe(sub);
   
   range_msg.radiation_type = sensor_msgs::Range::ULTRASOUND;
   range_msg.header.frame_id =  frameid;
@@ -67,11 +112,9 @@ float getRange_Ultrasound(){
     // Calculating the distance
     distance= duration*0.034/2;
 
- 
  return distance ;
-  
 }
-long range_time;
+
 
 void loop() {
 /* The following trigPin/echoPin cycle is used to determine the
@@ -90,37 +133,28 @@ void loop() {
   
   
   
-  
-  if(range_msg.range>10)
-  {
-    
-  digitalWrite(13, HIGH-digitalRead(13));   // blink the led
-  digitalWrite(8,HIGH);
-  digitalWrite(9,255);
-  //digitalWrite(8,LOW);
-  digitalWrite(7,LOW);
-  //digitalWrite(9,25);
-  digitalWrite(2,HIGH);
-  digitalWrite(4,255);
-  //digitalWrite(8,LOW);
-  digitalWrite(3,LOW);
-   
-  
-    }
-    
-  
-  if(range_msg.range<10){
-  digitalWrite(13, HIGH-digitalRead(13));   // blink the led
-  digitalWrite(8,HIGH);
-  digitalWrite(9,0);
-  //digitalWrite(8,LOW);
-  digitalWrite(7,1);
-  //digitalWrite(9,25);
-  digitalWrite(2,HIGH);
-  digitalWrite(4,0);
-  //digitalWrite(8,LOW);
-  digitalWrite(3,1);
-   }
+//  
+//  if(range_msg.range>10)
+//  {
+//    
+// 
+//   
+//  
+//    }
+//    
+//  
+//  if(range_msg.range<10){
+//  digitalWrite(13, HIGH-digitalRead(13));   // blink the led
+//  digitalWrite(8,HIGH);
+//  digitalWrite(9,0);
+//  //digitalWrite(8,LOW);
+//  digitalWrite(7,1);
+//  //digitalWrite(9,25);
+//  digitalWrite(2,HIGH);
+//  digitalWrite(4,0);
+//  //digitalWrite(8,LOW);
+//  digitalWrite(3,1);
+//   }
 
 
   /*if(range_msg.data == 2){
