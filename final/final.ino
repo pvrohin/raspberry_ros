@@ -2,7 +2,7 @@
 #include <ros/time.h>
 #include <sensor_msgs/Range.h>
 #include <std_msgs/Int32.h>
-
+#include <beginner_tutorials/motor.h>
 
 ros::NodeHandle  nh;
 
@@ -10,6 +10,68 @@ ros::NodeHandle  nh;
 #define echoPin 10 // Echo Pin
 #define trigPin 11 // Trigger Pin
 
+byte l1 = 2;  //left motor control pin 1
+byte l2 = 3;  //left motor control pin 2
+byte lpwm = 4; //left motor pwm pin
+
+
+byte r1 = 7;  //right motor control pin 1
+byte r2 = 8;  //right motor control pin 2
+byte rpwm = 9; //right motor pwm pin
+
+void forward()     //function defintion to run both the motors in forward direction
+{
+  digitalWrite(l1,HIGH);
+  digitalWrite(l2,LOW);
+  digitalWrite(lpwm,255);
+
+  digitalWrite(r1,LOW);
+  digitalWrite(r2,HIGH);
+  digitalWrite(rpwm,255);
+
+  }
+
+void halt()        //function defintion to stop both the motors
+{
+  digitalWrite(r1,LOW);
+  digitalWrite(r2,LOW);
+  digitalWrite(rpwm,HIGH);
+
+
+  digitalWrite(l1,LOW);
+  digitalWrite(l2,LOW);
+  digitalWrite(lpwm,HIGH);
+
+
+  }
+
+void left()
+{
+
+  digitalWrite(l1,HIGH);
+  digitalWrite(l2,LOW);
+  digitalWrite(lpwm,0);
+
+  digitalWrite(r1,LOW);
+  digitalWrite(r2,HIGH);
+  digitalWrite(rpwm,255);
+
+}
+
+void right()
+{
+  digitalWrite(l1,HIGH);
+  digitalWrite(l2,LOW);
+  digitalWrite(lpwm,255);
+
+  digitalWrite(r1,LOW);
+  digitalWrite(r2,HIGH);
+  digitalWrite(rpwm,0);
+
+
+
+
+}
 int maximumRange = 200; // Maximum range needed
 int minimumRange = 0; // Minimum range needed
 long duration;
@@ -20,42 +82,17 @@ int value;
 void messageCb( const std_msgs::Int32& motor_msg){
   value=motor_msg.data;
   if(value==1)
-  {digitalWrite(13, HIGH-digitalRead(13));  //fORWARD
-  //digitalWrite(8,HIGH);
-  digitalWrite(2,LOW);
-  digitalWrite(3,HIGH);
-  digitalWrite(4,255);
-  //digitalWrite(9,25);
-  digitalWrite(7,HIGH);
-  digitalWrite(8,LOW);
-  //digitalWrite(8,LOW);
-  digitalWrite(9,255);}
+  {forward();}            //FORWARD
 
   if(value==0)
-  {
-   digitalWrite(13, HIGH-digitalRead(13));   // STOP
-digitalWrite(8,HIGH);
- digitalWrite(9,0);
-  digitalWrite(8,LOW);
-  digitalWrite(7,LOW);
-digitalWrite(9,25);
-  digitalWrite(2,HIGH);
-  digitalWrite(4,0);
-  digitalWrite(8,LOW);
-  digitalWrite(3,LOW); 
-    }
-    if(value==2)
-  {digitalWrite(13, HIGH-digitalRead(13));    //LEFT
-  //digitalWrite(8,HIGH);
-  digitalWrite(2,LOW);
-  digitalWrite(3,HIGH);
-  digitalWrite(4,0);
-  //digitalWrite(9,25);
-  digitalWrite(7,HIGH);
-  digitalWrite(8,LOW);
-  //digitalWrite(8,LOW);
-  digitalWrite(9,255);}
-  
+  {halt();}              // STOP
+
+  if(value==2)
+ {left();}           //LEFT
+
+  if(value==3)
+ {right();}	//RIGHT
+
 }
 
 ros::Subscriber<std_msgs::Int32> sub("/imput", messageCb );
@@ -78,25 +115,25 @@ pinMode(8, OUTPUT);
 pinMode(9, OUTPUT);
 pinMode(13, OUTPUT);
   nh.initNode();
- 
- 
+
+
   nh.initNode();
   nh.advertise(pub_range);
   nh.subscribe(sub);
-  
+
   range_msg.radiation_type = sensor_msgs::Range::ULTRASOUND;
   range_msg.header.frame_id =  frameid;
-  
-  
+
+
   range_msg.field_of_view = 0.1;  // fake
   range_msg.min_range = 0.0;
   range_msg.max_range = 60;
-  
 
- 
+
+
  pinMode(trigPin, OUTPUT);
  pinMode(echoPin, INPUT);
-  
+
 }
 
 float getRange_Ultrasound(){
@@ -118,74 +155,22 @@ float getRange_Ultrasound(){
 
 void loop() {
 /* The following trigPin/echoPin cycle is used to determine the
- distance of the nearest object by bouncing soundwaves off of it. */ 
+ distance of the nearest object by bouncing soundwaves off of it. */
 
- 
+
 
    if ( millis() >= range_time ){
     int r =0;
 
-  
+
   range_msg.range = getRange_Ultrasound();
     range_msg.header.stamp = nh.now();
     pub_range.publish(&range_msg);
     range_time =  millis() + 50;
-  
-  
-  
-//  
-//  if(range_msg.range>10)
-//  {
-//    
-// 
-//   
-//  
-//    }
-//    
-//  
-//  if(range_msg.range<10){
-//  digitalWrite(13, HIGH-digitalRead(13));   // blink the led
-//  digitalWrite(8,HIGH);
-//  digitalWrite(9,0);
-//  //digitalWrite(8,LOW);
-//  digitalWrite(7,1);
-//  //digitalWrite(9,25);
-//  digitalWrite(2,HIGH);
-//  digitalWrite(4,0);
-//  //digitalWrite(8,LOW);
-//  digitalWrite(3,1);
-//   }
-
-
-  /*if(range_msg.data == 2){
-  digitalWrite(13, HIGH-digitalRead(13));   // blink the led
-  digitalWrite(8,HIGH);
-  digitalWrite(9,255);
-  //digitalWrite(8,LOW);
-  digitalWrite(7,LOW);
-  //digitalWrite(9,25);
-  digitalWrite(2,HIGH);
-  digitalWrite(4,0);
-  //digitalWrite(8,LOW);
-  digitalWrite(3,1);
-   }
-
-   if(range_msg.data == 3){
-  digitalWrite(13, HIGH-digitalRead(13));   // blink the led
-  digitalWrite(8,HIGH);
-  digitalWrite(9,0);
-  //digitalWrite(8,LOW);
-  digitalWrite(7,1);
-  //digitalWrite(9,25);
-  digitalWrite(2,HIGH);
-  digitalWrite(4,255);
-  //digitalWrite(8,LOW);
-  digitalWrite(3,0);
-   }*/
   }
 
-  
+
   nh.spinOnce();
- 
+
 
 delay(50);}
