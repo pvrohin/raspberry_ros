@@ -23,7 +23,7 @@ sudo chmod a+rw /dev/ttyACM0
 rosrun rosserial_python serial_node.py /dev/ttyACM0
 ```
 ### Run the Python file
-#### Speed Control 
+#### If Control 
 In the python file directory,open a terminal and run the following command
 ```python 
 rosrun beginner_tutorials if_control.py
