@@ -29,7 +29,8 @@ In the python file directory,open a terminal and run the following command
 rosrun beginner_tutorials if_control.py
 ```
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/dbZTTAcDrP0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/dbZTTAcDrP0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+</iframe>
 
 #### Proportional Control
 In the python file directory,open a terminal and run the following command
