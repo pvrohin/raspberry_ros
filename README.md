@@ -7,7 +7,7 @@ Open a new terminal in Arduino folder and run the following command in the termi
 ```python
 sudo ./arduino
 ```
-Upload the code speed_control.ino to the board
+Upload the code **speed_control.ino** to the board
 
 ### How to use
 
@@ -25,7 +25,7 @@ rosrun rosserial_python serial_node.py /dev/ttyACM0
 ### Run the Python file
 #### Speed Control 
 In the python file directory,open a terminal and run the following command
-```python
+```python 
 rosrun beginner_tutorials if_control.py
 ```
 #### Proportional Control
