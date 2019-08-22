@@ -1,7 +1,7 @@
 # Raspberry_ros
  Motor control with arduino and raspberry pi from Ultrasonic range data
 
-![alt text](https://github.com/pvrohin/raspberry_ros/blob/master/images/IMG_20190221_233816.jpg "Logo Title Text 1")
+![alt text](https://github.com/pvrohin/raspberry_ros/blob/master/images/raspberry_ros.jpg)
 ## Open arduino IDE
 Open a new terminal in Arduino folder and run the following command in the terminal
 ```python
